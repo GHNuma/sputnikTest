@@ -1,34 +1,23 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import "./App.css"
+import {products} from "./mock.ts"
+import type {ProductCardProps} from "./components/product-card/types.ts"
+import {lazy, Suspense} from "react"
+
+const ProductCard = lazy(() => import("./components/product-card/product-card.tsx"))
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <div className="flex justify-center mt-20 items-center w-full h-full">
+      <Suspense fallback={<p className="text-center">Загрузка товаров...</p>}>
+        <div className="flex gap-3 flex-col w-full items-center">
+          {products.length > 0 ? (
+            products.map((product: ProductCardProps) => <ProductCard key={product.title} {...product} />)
+          ) : (
+            <p>Нет товаров</p>
+          )}
+        </div>
+      </Suspense>
+    </div>
   )
 }
 
